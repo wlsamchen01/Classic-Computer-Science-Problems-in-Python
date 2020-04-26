@@ -105,6 +105,52 @@ def node_to_path(node: Node[T]) -> List[T]:
     path.reverse()
     return path
 
+class Queue(Generic[T]):
+    def __init__(self) -> None:
+        self._container: Deque[T] = Deque()
+    
+    @property
+    def empty(self) -> bool:
+        return not self._container # not is true for empty container
+    
+    def push(self, item: T) -> None:
+        self._container.append(item)
+    
+    def pop(self) -> T:
+        return self._container.popleft() # FIFO
+    
+    def __repr__(self) -> str:
+        return repr(self.container)
+
+def bfs(initial: T, goal_test: Callable[[T], bool],\
+        successors: Callable[[T], List[T]]) -> Optional[Node[T]]:
+    # frontier is where we've yet to go
+    frontier: Queue[Node[T]] = Queue()
+    frontier.push(Node(initial,None))
+    
+    # explored is where we've been
+    explored: Set[T] = {initial}
+        
+    # keep going while there is more to explore
+    while not frontier.empty:
+        # get the first in the queue to explore
+        current_node: Node[T] = frontier.pop()
+        # check whether the node is blank, X, S or G
+        current_state: T = current_node.state
+        
+        # if current state is equal the goal, we're done
+        if goal_test(current_state):
+            return current_node
+        
+        # check where we can go next and haven't explored
+        # remember successors is a method in the class maze
+        for child in successors(current_state):
+            if child in explored:# skip children we already explored
+                continue
+            explored.add(child)
+            frontier.push(Node(child, current_node))
+    return None # gone through everything and never found goal
+    
 if __name__ == '__main__':
     print(linear_contains([1, 5, 15, 15, 15, 15, 20], 5))  # True
     print(binary_contains(['a', 'd', 'e', 'f', 'z'], 'f'))  # True
