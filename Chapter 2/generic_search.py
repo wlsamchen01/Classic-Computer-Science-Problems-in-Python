@@ -199,13 +199,14 @@ def astar(initial: T, goal_test: Callable[[T], bool], successors: Callable[[T], 
                 # 1 assumes a grid, need a cost function for more sophisticated apps
                 
                 # add or update node-cost pair to explored
-                # the dunder method Node.__lt__() let us compare cost+heuristc with cost
+
             if child not in explored or explored[child] > new_cost:
                 try:
                     print("explored child: ", explored[child], "new cost: ", new_cost)
                 except:
                           print("child not in explored, new cost is ", new_cost)
                 explored[child] = new_cost
+                print("heuristic of child is", heuristic(child),"\n")
                 # push the child into frontier, with all its parent, cost and heuristic details
                 frontier.push(Node(child, current_node, new_cost, heuristic(child)))
     return None # went through everything and never found goal
