@@ -6,8 +6,8 @@ D = TypeVar('D') # domain type
 
 # Base class for all constraints
 class Constraint(Generic[V, D], ABC):
-    def __init__(self, variabls: List[V]) -> None:
-        self.variables: variables
+    def __init__(self, variables: List[V]) -> None:
+        self.variables = variables
     
     # Must be overriden by subclass
     @abstractmethod
@@ -20,6 +20,7 @@ class Constraint(Generic[V, D], ABC):
 class CSP(Generic[V,D]):
     def __init__(self, variables: List[V], domains: Dict[V, List[D]]) -> None:
         self.variables: List[V] = variables # variables to be constrained
+        self.domains: Dict[V, List[D]] = domains # domain of each variable
         self.constraints: Dict[V, List[Constraint[V,D]]] = {}
         for variable in self.variables:
             self.constraints[variable] = []
@@ -58,6 +59,6 @@ class CSP(Generic[V,D]):
             if self.consistent(first, local_assignment):
                 result: Optional[Dict[V, D]] = self.backtracking_search(local_assignment)
             # if we can't find a result
-            if result is not None:
-                return result
+                if result is not None:
+                    return result
         return None
