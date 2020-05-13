@@ -89,6 +89,7 @@ def dfs(initial: T, goal_test: Callable[[T], bool], successors: Callable[[T],
             return current_node
         
         # check where we can go next and haven't explored
+        # successor is a class in maze file
         for child in successors(current_state):
             if child in explored:  # skip children we already explored
                 continue
