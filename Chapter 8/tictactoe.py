@@ -37,7 +37,7 @@ class TTTBoard(Board):
 
     def move(self, location: Move) -> Board:
         temp_position: List[TTTPiece] = self.position.copy()
-        temp_position: [location] = self._turn
+        temp_position[location] = self._turn
         return TTTBoard(temp_position, self._turn.opposite)
 
     @property
